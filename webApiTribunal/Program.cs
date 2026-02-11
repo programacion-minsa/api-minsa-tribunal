@@ -18,6 +18,16 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    
+    // Only use these two lines if your Nginx and API are in a secure/private network.
+    // It clears the default 'KnownProxies' list to accept headers from any IP.
+    // options.KnownProxies.Clear(); 
+    // options.KnownNetworks.Clear();
+});
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
                        throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<DBContext>(options => options.UseSqlServer(connectionString));
@@ -66,6 +76,8 @@ builder.Services.AddTransient<ITribunalService, TribunalService>();
 var app = builder.Build();
 app.UseRateLimiter();
 
+app.UseForwardedHeaders();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -73,10 +85,13 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 }
 
-app.UseForwardedHeaders(new ForwardedHeadersOptions
-{
-    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-});
+// app.UseForwardedHeaders(new ForwardedHeadersOptions
+// {
+//     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+//     
+//     options.KnownProxies.Clear(); 
+//     options.KnownNetworks.Clear();
+// });
 
 app.UseExceptionHandler("/error");
 
