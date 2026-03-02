@@ -1,4 +1,3 @@
-using System.Net.Http.Headers;
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.RateLimiting;
@@ -24,8 +23,8 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
     
     // Only use these two lines if your Nginx and API are in a secure/private network.
     // It clears the default 'KnownProxies' list to accept headers from any IP.
-    // options.KnownProxies.Clear(); 
-    // options.KnownNetworks.Clear();
+    options.KnownProxies.Clear(); 
+    options.KnownNetworks.Clear();
 });
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
@@ -84,14 +83,6 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
     app.MapScalarApiReference();
 }
-
-// app.UseForwardedHeaders(new ForwardedHeadersOptions
-// {
-//     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-//     
-//     options.KnownProxies.Clear(); 
-//     options.KnownNetworks.Clear();
-// });
 
 app.UseExceptionHandler("/error");
 

@@ -11,6 +11,7 @@ public class PersonModel
     public string CedulaVencimiento { get; set; } = "";
 
     public string PrimerNombre { get; set; } = "";
+    public string SegundoNombre { get; set; } = "";
     public string ApellidoPaterno { get; set; } = "";
     public string ApellidoMeterno { get; set; } = "";
 

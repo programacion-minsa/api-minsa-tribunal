@@ -69,7 +69,6 @@ public class TribunalService : ITribunalService
         }
 
         string remoteIp = httpContext?.Connection.RemoteIpAddress?.ToString() ?? "N/A";
-
         AppsAccessLog log = new AppsAccessLog()
         {
             UserAgent = userAgent,
@@ -148,6 +147,7 @@ public class TribunalService : ITribunalService
                 }
 
                 personaData.PrimerNombre = ((string)personaPublica.Element(ns + "primer_nombre") ?? "").Trim();
+                personaData.SegundoNombre = ((string)personaPublica.Element(ns + "segundo_nombre") ?? "").Trim();
                 personaData.ApellidoPaterno = ((string)personaPublica.Element(ns + "apellido_paterno") ?? "").Trim();
                 personaData.ApellidoMeterno = ((string)personaPublica.Element(ns + "apellido_materno" ?? "")).Trim();
 
